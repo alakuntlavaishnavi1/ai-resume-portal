@@ -1,0 +1,122 @@
+<?php
+session_start();
+
+$error_message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Localhost Database Connection
+    $conn = mysqli_connect("localhost", "root", "", "ai_resume_analyzer");
+
+    if (!$conn) {
+        die("Database Connection Failed: " . mysqli_connect_error());
+    }
+
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    if (!empty($email) && !empty($password)) {
+        // Prepared Statement for SQL Injection Security
+        $stmt = mysqli_prepare($conn, "SELECT id, password FROM students WHERE email = ?");
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($user = mysqli_fetch_assoc($result)) {
+            // Check password (Plain text or Password Hash support)
+            if ($password ===$user['password'] || password_verify($password,$user['password'])) {
+                $_SESSION['student_id'] =$user['id'];
+                $_SESSION['student_email'] =$email;
+
+                header("Location: student-dashboard.php");
+                exit();
+            } else {
+                $error_message = "Invalid Password!";
+            }
+        } else {
+            $error_message = "No account found with this Email!";
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        $error_message = "Please fill in all fields.";
+    }
+
+    mysqli_close($conn);
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - ResumeAI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8eaff, #f7f8ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #6554df;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 28px;
+            font-size: 15px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 8px;
+            font-weight: 600;
+            color: #333333;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #6554df;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            border: none;
+            border-radius: 8px;
+            background: #6554df;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Checker | AI Resume Analyzer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 25px;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        main {
+            max-width: 750px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #0000000d;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #172554;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #94a3b8;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 18px;
+            background: #2456a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #193f80;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: #eff6ff;
+            border-radius: 8px;
+        }
+
+        #message {
+            margin-top: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        ul {
+            padding-left: 22px;
+            line-height: 1.9;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+            color: #2456a6;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AI Resume Analyzer</h1>
+        <p style="color:white; margin-top:10px;">
+            Upload your resume for a basic check
+        </p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Resume Checker</h2>
+
+            <p>
+                Select your resume in PDF format.
+                Maximum file size: 5 MB.
+            </p>
+
+            <form id="resumeForm">
+                <input
+                    type="file"
+                    id="resumeFile"
+                    accept=".pdf,application/pdf"
+                    required
+                >
+
+                <button type="submit" id="checkButton">
+                    Check Resume
+                </button>
+            </form>
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+            <div id="result">
+                <h2>File Details</h2>
+                <p><strong>File name:</strong> <span id="fileName"></span></p>
+                <p><strong>File size:</strong> <span id="fileSize"></span></p>
+                <p><strong>Basic status:</strong> File selected successfully.</p>
+
+                <h3>Resume Checklist</h3>
+                <ul>
+                    <li>Check contact details.</li>
+                    <li>Include education details.</li>
+                    <li>Mention relevant technical skills.</li>
+                    <li>Describe projects and achievements.</li>
+                    <li>Check spelling and formatting.</li>
+                </ul>
+
+                <p style="margin-top:15px;">
+                    Note: This page checks file details only.
+                    It does not yet extract or analyze resume content.
+                </p>
+            </div>
+
+            <a class="back-link" href="../home.html">
+                ← Back to Home
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        AI Resume Analyzer © 2026
+    </footer>
+
+    <script>
+        const form = document.getElementById("resumeForm");
+        const fileInput = document.getElementById("resumeFile");
+        const message = document.getElementById("message");
+        const result = document.getElementById("result");
+        const checkButton = document.getElementById("checkButton");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const file = fileInput.files[0];
+            result.style.display = "none";
+
+            if (!file) {
+                message.textContent = "Please select a PDF resume.";
+                return;
+            }
+
+            if (
+                file.type !== "application/pdf" &&
+                !file.name.toLowerCase().endsWith(".pdf")
+            ) {
+                message.textContent = "Please select a PDF file.";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                message.textContent = "File size must be less than 5 MB.";
+                return;
+            }
+
+            document.getElementById("fileName").textContent = file.name;
+
+            document.getElementById("fileSize").textContent =
+                (file.size / 1024).toFixed(2) + " KB";
+
+            result.style.display = "block";
+            message.textContent = "File selected successfully!";
+        });
+    </script>
+
+</body>
+</html>
