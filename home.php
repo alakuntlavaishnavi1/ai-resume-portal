@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Portal</title>
-    <link rel="stylesheet" href="styles/main-style.css">
+    <link rel="stylesheet" href="./styles/main-style.css">
 </head>
 <body>
 
@@ -42,6 +42,7 @@
         </section>
     </main>
 
-    <script src="scripts/portal-script.js"></script>
+    <!-- Corrected Script Path -->
+    <script src="./scripts/portal-script.js"></script>
 </body>
 </html>
