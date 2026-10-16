@@ -1,10 +1,15 @@
 <?php
+// Errors screen meeda clear ga kanipinchadaniki idi add chesamu
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Vercel / Remote Database Credentials (Environment variables vaadadam best practice)
+    // Vercel / Remote Database Credentials
     $db_host = getenv('DB_HOST') ?: "localhost";
     $db_user = getenv('DB_USER') ?: "root";
     $db_pass = getenv('DB_PASS') ?: "";
@@ -13,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
     if (!$conn) {
-        $error_message = "Database Connection Failed. Please check cloud database config.";
+        $error_message = "Database Connection Failed: " . mysqli_connect_error();
     } else {
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
@@ -41,6 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $error_message = "No account found with this Email!";
                 }
                 mysqli_stmt_close($stmt);
+            } else {
+                $error_message = "SQL Prepare Error: " . mysqli_error($conn);
             }
         } else {
             $error_message = "Please fill in all fields.";
