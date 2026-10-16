@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Portal</title>
-    <link rel="stylesheet" href="./styles/main-style.css">
+    <!-- Favicon missing warning ni prevent cheyadanki -->
+    <link rel="icon" href="data:,">
+    <!-- Corrected CSS Path -->
+    <link rel="stylesheet" href="styles/main-style.css">
 </head>
 <body>
 
@@ -22,7 +25,7 @@
                     <a href="home.php">Home</a>
                     <a href="#features">Features</a>
                     <a href="#how-it-works">How It Works</a>
-                    <!-- సరిచేసిన PHP లింక్‌లు -->
+                    <!-- Navigation Links -->
                     <a href="student-pages/student-login.php">Student Login</a>
                     <a href="admin-pages/admin-login.php">Admin Login</a>
                 </nav>
@@ -32,7 +35,7 @@
 
     <!-- HERO SECTION -->
     <main>
-        <section class="hero">
+        <section class="hero" id="home">
             <div class="container hero-content">
                 <div class="hero-text">
                     <h1>Optimize Your Resume with AI</h1>
@@ -40,9 +43,21 @@
                 </div>
             </div>
         </section>
+
+        <!-- FEATURES SECTION (Anchoring test kosam) -->
+        <section id="features" class="container" style="padding: 50px 0;">
+            <h2>Features</h2>
+            <p>Explore AI-driven resume scoring, ATS check, and keyword suggestions.</p>
+        </section>
+
+        <!-- HOW IT WORKS SECTION -->
+        <section id="how-it-works" class="container" style="padding: 50px 0;">
+            <h2>How It Works</h2>
+            <p>Upload your resume, analyze ATS compatibilty, and apply recommendations.</p>
+        </section>
     </main>
 
-    <!-- Corrected Script Path -->
-    <script src="./scripts/portal-script.js"></script>
+    <!-- Corrected Script Path (Space teesaamu) -->
+    <script src="scripts/portal-script.js"></script>
 </body>
 </html>
