@@ -1,5 +1,5 @@
 <?php
-// Errors screen meeda clear ga kanipinchadaniki idi add chesamu
+// Errors screen meeda clear ga kanipinchadaniki
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -9,7 +9,6 @@ session_start();
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Vercel / Remote Database Credentials
     $db_host = getenv('DB_HOST') ?: "localhost";
     $db_user = getenv('DB_USER') ?: "root";
     $db_pass = getenv('DB_PASS') ?: "";
@@ -20,11 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!$conn) {
         $error_message = "Database Connection Failed: " . mysqli_connect_error();
     } else {
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
         if (!empty($email) && !empty($password)) {
-            // Prepared Statement for SQL Injection Security
             $stmt = mysqli_prepare($conn, "SELECT id, password FROM students WHERE email = ?");
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, "s", $email);
@@ -32,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $result = mysqli_stmt_get_result($stmt);
 
                 if ($user = mysqli_fetch_assoc($result)) {
-                    // Check password
                     if ($password === $user['password'] || password_verify($password, $user['password'])) {
                         $_SESSION['student_id'] = $user['id'];
                         $_SESSION['student_email'] = $email;
