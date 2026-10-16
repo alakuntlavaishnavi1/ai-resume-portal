@@ -4,43 +4,50 @@ session_start();
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Localhost Database Connection
-    $conn = mysqli_connect("localhost", "root", "", "ai_resume_analyzer");
+    // Vercel / Remote Database Credentials (Environment variables vaadadam best practice)
+    $db_host = getenv('DB_HOST') ?: "localhost";
+    $db_user = getenv('DB_USER') ?: "root";
+    $db_pass = getenv('DB_PASS') ?: "";
+    $db_name = getenv('DB_NAME') ?: "ai_resume_analyzer";
+
+    $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
     if (!$conn) {
-        die("Database Connection Failed: " . mysqli_connect_error());
-    }
+        $error_message = "Database Connection Failed. Please check cloud database config.";
+    } else {
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
 
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
+        if (!empty($email) && !empty($password)) {
+            // Prepared Statement for SQL Injection Security
+            $stmt = mysqli_prepare($conn, "SELECT id, password FROM students WHERE email = ?");
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
 
-    if (!empty($email) && !empty($password)) {
-        // Prepared Statement for SQL Injection Security
-        $stmt = mysqli_prepare($conn, "SELECT id, password FROM students WHERE email = ?");
-        mysqli_stmt_bind_param($stmt, "s", $email);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+                if ($user = mysqli_fetch_assoc($result)) {
+                    // Check password
+                    if ($password === $user['password'] || password_verify($password, $user['password'])) {
+                        $_SESSION['student_id'] = $user['id'];
+                        $_SESSION['student_email'] = $email;
 
-        if ($user = mysqli_fetch_assoc($result)) {
-            // Check password (Plain text or Password Hash support)
-            if ($password ===$user['password'] || password_verify($password,$user['password'])) {
-                $_SESSION['student_id'] =$user['id'];
-                $_SESSION['student_email'] =$email;
-
-                header("Location: student-dashboard.php");
-                exit();
-            } else {
-                $error_message = "Invalid Password!";
+                        header("Location: student-dashboard.php");
+                        exit();
+                    } else {
+                        $error_message = "Invalid Password!";
+                    }
+                } else {
+                    $error_message = "No account found with this Email!";
+                }
+                mysqli_stmt_close($stmt);
             }
         } else {
-            $error_message = "No account found with this Email!";
+            $error_message = "Please fill in all fields.";
         }
-        mysqli_stmt_close($stmt);
-    } else {
-        $error_message = "Please fill in all fields.";
-    }
 
-    mysqli_close($conn);
+        mysqli_close($conn);
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -48,8 +55,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login - ResumeAI</title>
-
+    <title>Student Login - AI Resume Portal</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/main-style.css">
     <style>
         * {
             box-sizing: border-box;
@@ -119,4 +127,42 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             color: #ffffff;
             font-size: 16px;
             font-weight: bold;
-            cursor
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #5243c2;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h1>Student Login</h1>
+        <div class="subtitle">Welcome back! Please login to your account.</div>
+
+        <?php if (!empty($error_message)) { echo '<div class="error">' . $error_message . '</div>'; } ?>
+
+        <form action="" method="POST">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+</body>
+</html>
