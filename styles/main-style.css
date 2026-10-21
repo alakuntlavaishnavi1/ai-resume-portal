@@ -1,24 +1,164 @@
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+/* RESET & BASE STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-<script>
-(function () {
-    const path = window.location.pathname;
+body {
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.7;
+}
 
-    let cssPath = "styles/main-style.css";
+.container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-    if (
-        path.includes("/student-pages/") ||
-        path.includes("/admin-pages/") ||
-        path.includes("/analyzer-pages/")
-    ) {
-        cssPath = "../styles/main-style.css";
+/* HEADER & NAVBAR STYLES */
+.header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+
+.navigation a {
+    color: #94a3b8;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.navigation a:hover {
+    color: #38bdf8;
+}
+
+.menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* HERO SECTION - Modern Gradient & Clear Text */
+.hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #ffffff;
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-text h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.hero-text p {
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    max-width: 650px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+/* FEATURES & HOW IT WORKS SECTIONS (Card Style) */
+section {
+    padding: 70px 0;
+}
+
+section.container {
+    background: #ffffff;
+    margin: 40px auto;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+}
+
+section h2 {
+    color: #0f172a;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+section p {
+    color: #64748b;
+    font-size: 1.15rem;
+}
+
+/* FOOTER SECTION */
+footer {
+    background: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 60px;
+    font-size: 0.95rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .menu-button {
+        display: block;
     }
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = cssPath;
+    .navigation {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: #0f172a;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
 
-    document.head.appendChild(link);
-})();
-</script>
+    .navigation.active {
+        display: flex;
+    }
+
+    .navigation a {
+        margin: 12px 0;
+    }
+
+    .hero-text h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+}
