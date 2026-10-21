@@ -9,11 +9,14 @@ session_start();
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Render kosam direct ga mee remote database details ikkada rayandi
-    $db_host = "mee_remote_host_ikkada_rayandi"; // e.g. sql12.freemysqlhosting.net
-    $db_user = "mee_db_username";               // e.g. sql123456
-    $db_pass = "mee_db_password";               // Database password
-    $db_name = "mee_db_name";                   // Database name
+    
+    // ====================================================================
+    // 🗄️ DATABASE CONNECTION DETAILS
+    // ====================================================================
+    $db_host = "YOUR_DATABASE_HOST_HERE"; // (e.g. sql12.freemysqlhosting.net - mee hosting ichina host ikkada rayandi)
+    $db_user = "Vaishu";                   // Mee database username
+    $db_pass = "vaishu@123";               // Mee database password
+    $db_name = "YOUR_DATABASE_NAME_HERE"; // (e.g. sql123456_db - mee database peru ikkada rayandi)
 
     $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
