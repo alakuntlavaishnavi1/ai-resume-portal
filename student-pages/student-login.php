@@ -9,10 +9,11 @@ session_start();
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $db_host = getenv('DB_HOST') ?: "localhost";
-    $db_user = getenv('DB_USER') ?: "root";
-    $db_pass = getenv('DB_PASS') ?: "";
-    $db_name = getenv('DB_NAME') ?: "ai_resume_analyzer";
+    // Render kosam direct ga mee remote database details ikkada rayandi
+    $db_host = "mee_remote_host_ikkada_rayandi"; // e.g. sql12.freemysqlhosting.net
+    $db_user = "mee_db_username";               // e.g. sql123456
+    $db_pass = "mee_db_password";               // Database password
+    $db_name = "mee_db_name";                   // Database name
 
     $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
