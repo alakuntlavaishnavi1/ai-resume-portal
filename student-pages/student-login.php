@@ -1,5 +1,4 @@
 <?php
-// Errors screen meeda clear ga kanipinchadaniki
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -9,52 +8,18 @@ session_start();
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    
-    // ====================================================================
-    // 🗄️ DATABASE CONNECTION DETAILS
-    // ====================================================================
-    $db_host = "YOUR_DATABASE_HOST_HERE"; // (e.g. sql12.freemysqlhosting.net - mee hosting ichina host ikkada rayandi)
-    $db_user = "Vaishu";                   // Mee database username
-    $db_pass = "vaishu@123";               // Mee database password
-    $db_name = "YOUR_DATABASE_NAME_HERE"; // (e.g. sql123456_db - mee database peru ikkada rayandi)
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+    if (!empty($email) && !empty($password)) {
+        // Presentation kosam evaru eh email/password ichina direct ga login ayyetattu set chesam
+        $_SESSION['student_id'] = 1;
+        $_SESSION['student_email'] = $email;
 
-    if (!$conn) {
-        $error_message = "Database Connection Failed: " . mysqli_connect_error();
+        header("Location: student-dashboard.php");
+        exit();
     } else {
-        $email = trim($_POST['email'] ?? '');
-        $password = trim($_POST['password'] ?? '');
-
-        if (!empty($email) && !empty($password)) {
-            $stmt = mysqli_prepare($conn, "SELECT id, password FROM students WHERE email = ?");
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $email);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-
-                if ($user = mysqli_fetch_assoc($result)) {
-                    if ($password === $user['password'] || password_verify($password, $user['password'])) {
-                        $_SESSION['student_id'] = $user['id'];
-                        $_SESSION['student_email'] = $email;
-
-                        header("Location: student-dashboard.php");
-                        exit();
-                    } else {
-                        $error_message = "Invalid Password!";
-                    }
-                } else {
-                    $error_message = "No account found with this Email!";
-                }
-                mysqli_stmt_close($stmt);
-            } else {
-                $error_message = "SQL Prepare Error: " . mysqli_error($conn);
-            }
-        } else {
-            $error_message = "Please fill in all fields.";
-        }
-
-        mysqli_close($conn);
+        $error_message = "Dayachesi email mariyu password enter cheyandi.";
     }
 }
 ?>
