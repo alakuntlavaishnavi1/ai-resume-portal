@@ -44,7 +44,7 @@
             </div>
         </section>
 
-        <!-- FEATURES SECTION (Anchoring test kosam) -->
+        <!-- FEATURES SECTION -->
         <section id="features" class="container" style="padding: 50px 0;">
             <h2>Features</h2>
             <p>Explore AI-driven resume scoring, ATS check, and keyword suggestions.</p>
@@ -57,7 +57,12 @@
         </section>
     </main>
 
-    <!-- Corrected Script Path (Space teesaamu) -->
+    <!-- FOOTER SECTION -->
+    <footer style="background: #333; color: #fff; text-align: center; padding: 20px 0; margin-top: 40px;">
+        <p>&copy; 2026 AI Resume Portal. All rights reserved.</p>
+    </footer>
+
+    <!-- Corrected Script Path -->
     <script src="scripts/portal-script.js"></script>
 </body>
 </html>
