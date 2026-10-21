@@ -32,6 +32,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .found { color: #2e7d32; margin: 6px 0; font-size: 16px; font-weight: 500; }
         .missing { color: #c62828; margin: 6px 0; font-size: 16px; font-weight: 500; }
         .salary { background: #e2e8f0; padding: 10px 15px; border-radius: 20px; display: inline-block; font-weight: bold; margin-top: 12px; color: #1a365d; }
+        
+        /* Roadmap Clickable Styles */
+        .roadmap-links span {
+            color: #2b6cb0;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .roadmap-links span:hover {
+            color: #1a365d;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h2>Welcome, Vaishnavi!</h2>
             <p>Upload your resume PDF to view the complete analysis report.</p>
             
-            <!-- ఇక్కడ action లో student-dashboard.php అని మార్చబడింది -->
             <form action="student-dashboard.php" method="POST" enctype="multipart/form-data">
                 <input type="file" name="resume" accept=".pdf" required><br><br>
                 <button type="submit" class="upload-btn">Analyze Resume</button>
@@ -94,10 +135,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <li>AWS Basics</li>
                 </ul>
                 <h4 style="margin-top: 20px;">Roadmap:</h4>
-                <p style="font-weight: bold; color: #2b6cb0; font-size: 16px;">Beginner ➔ Intermediate ➔ Advanced</p>
+                
+                <!-- Clickable Roadmap Links -->
+                <p class="roadmap-links" style="font-size: 16px;">
+                    <span onclick="openRoadmap('Beginner')">Beginner</span> ➔ 
+                    <span onclick="openRoadmap('Intermediate')">Intermediate</span> ➔ 
+                    <span onclick="openRoadmap('Advanced')">Advanced</span>
+                </p>
             </div>
         <?php endif; ?>
     </div>
+
+    <!-- Roadmap Popup Modal -->
+    <div id="roadmapModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRoadmap()">&times;</span>
+            <h3 id="modalTitle">Roadmap Details</h3>
+            <p id="modalText">Loading...</p>
+        </div>
+    </div>
+
+    <!-- JavaScript for Modal Popup -->
+    <script>
+        function openRoadmap(level) {
+            const modal = document.getElementById('roadmapModal');
+            const title = document.getElementById('modalTitle');
+            const text = document.getElementById('modalText');
+            
+            title.innerText = level + " Roadmap";
+            
+            if (level === 'Beginner') {
+                text.innerHTML = "<ul><li>Learn basic programming (Python/Java)</li><li>Understand HTML, CSS, JavaScript basics</li><li>Learn Git & GitHub basics</li></ul>";
+            } else if (level === 'Intermediate') {
+                text.innerHTML = "<ul><li>Master Data Structures & Algorithms (DSA)</li><li>Work with Databases (SQL/MongoDB)</li><li>Build small full-stack projects</li></ul>";
+            } else if (level === 'Advanced') {
+                text.innerHTML = "<ul><li>Learn Cloud Services (AWS / Azure)</li><li>System Design & Architecture</li><li>Contribute to Open Source & Deploy Projects</li></ul>";
+            }
+            
+            modal.style.display = "block";
+        }
+
+        function closeRoadmap() {
+            document.getElementById('roadmapModal').style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('roadmapModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
