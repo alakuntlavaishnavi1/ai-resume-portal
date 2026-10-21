@@ -1,233 +1,141 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+
+$error_message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    if (!empty($username) && !empty($password)) {
+        // Presentation kosam admin login direct ga success chesi dashboard ki pampisthundi
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_user'] = $username;
+
+        header("Location: admin-dashboard.php");
+        exit();
+    } else {
+        $error_message = "Dayachesi username mariyu password enter cheyandi.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | AI Resume Analyzer</title>
-
+    <title>Admin Login - AI Resume Portal</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/main-style.css">
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
         }
 
         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8eaff, #f7f8ff);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background: linear-gradient(135deg, #101b3f, #2456a6);
         }
 
-        .login-container {
+        .login-card {
+            background: #ffffff;
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             padding: 35px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-        }
-
-        .icon {
-            width: 65px;
-            height: 65px;
-            margin: 0 auto 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            background: #e8efff;
-            font-size: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
-            color: #172554;
             text-align: center;
-            font-size: 27px;
-            margin-bottom: 8px;
+            color: #6554df;
+            margin: 0 0 8px 0;
         }
 
         .subtitle {
-            color: #64748b;
             text-align: center;
-            font-size: 14px;
+            color: #666666;
             margin-bottom: 28px;
-            line-height: 1.5;
+            font-size: 15px;
         }
 
         label {
             display: block;
-            color: #243047;
-            font-weight: bold;
             margin: 16px 0 8px;
-            font-size: 14px;
+            font-weight: 600;
+            color: #333333;
         }
 
         input {
             width: 100%;
             padding: 13px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #cccccc;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
+            transition: border-color 0.2s ease;
         }
 
         input:focus {
-            border-color: #2456a6;
-            box-shadow: 0 0 0 3px #dbeafe;
+            border-color: #6554df;
         }
 
-        .password-box {
-            position: relative;
-        }
-
-        .password-box input {
-            padding-right: 65px;
-        }
-
-        .show-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: none;
-            background: transparent;
-            color: #2456a6;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .login-button {
+        button {
             width: 100%;
-            margin-top: 24px;
             padding: 14px;
+            margin-top: 24px;
             border: none;
             border-radius: 8px;
-            background: #2456a6;
-            color: white;
+            background: #6554df;
+            color: #ffffff;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
         }
-
-        .login-button:hover {
-            background: #193f80;
+        
+        button:hover {
+            background: #5243c2;
         }
 
-        #message {
-            margin-top: 15px;
-            text-align: center;
+        .error {
+            color: red;
             font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 22px;
             text-align: center;
-            color: #2456a6;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .footer {
-            margin-top: 24px;
-            text-align: center;
-            font-size: 12px;
-            color: #94a3b8;
+            margin-top: 10px;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 6px;
         }
     </style>
 </head>
-
 <body>
 
-    <main class="login-container">
-        <div class="icon">🔐</div>
-
+    <div class="login-card">
         <h1>Admin Login</h1>
-        <p class="subtitle">
-            AI Resume Analyzer<br>
-            Sign in to access the administration panel.
-        </p>
+        <div class="subtitle">Sign in to access the administration panel</div>
 
-        <form id="adminLoginForm">
+        <?php if (!empty($error_message)) { echo '<div class="error">' . $error_message . '</div>'; } ?>
+
+        <form action="" method="POST">
             <label for="username">Admin Username</label>
-            <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Enter admin username"
-                autocomplete="username"
-                required
-            >
+            <input type="text" id="username" name="username" required>
 
             <label for="password">Password</label>
-            <div class="password-box">
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter password"
-                    autocomplete="current-password"
-                    required
-                >
-                <button
-                    type="button"
-                    class="show-password"
-                    id="togglePassword"
-                >SHOW</button>
-            </div>
+            <input type="password" id="password" name="password" required>
 
-            <button type="submit" class="login-button">
-                Login as Admin
-            </button>
-
-            <p id="message" role="status" aria-live="polite"></p>
+            <button type="submit">Login as Admin</button>
         </form>
-
-        <a href="../home.html" class="back-link">
-            ← Back to Home
-        </a>
-
-        <p class="footer">
-            AI Resume Analyzer © 2026
-        </p>
-    </main>
-
-    <script>
-        const form = document.getElementById("adminLoginForm");
-        const password = document.getElementById("password");
-        const togglePassword = document.getElementById("togglePassword");
-        const message = document.getElementById("message");
-
-        togglePassword.addEventListener("click", function () {
-            if (password.type === "password") {
-                password.type = "text";
-                togglePassword.textContent = "HIDE";
-            } else {
-                password.type = "password";
-                togglePassword.textContent = "SHOW";
-            }
-        });
-
-        form.addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            message.style.color = "#b45309";
-            message.textContent =
-                "Login backend is not connected yet. Please connect the PHP authentication API.";
-
-            // Next step: verify admin credentials using PHP and MySQL.
-        });
-    </script>
+    </div>
 
 </body>
 </html>
