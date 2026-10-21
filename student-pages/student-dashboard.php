@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h2>Welcome, Vaishnavi!</h2>
             <p>Upload your resume PDF to view the complete analysis report.</p>
             
-            <form action="student-dashboard-new.php" method="POST" enctype="multipart/form-data">
+            <!-- ఇక్కడ action లో student-dashboard.php అని మార్చబడింది -->
+            <form action="student-dashboard.php" method="POST" enctype="multipart/form-data">
                 <input type="file" name="resume" accept=".pdf" required><br><br>
                 <button type="submit" class="upload-btn">Analyze Resume</button>
             </form>
